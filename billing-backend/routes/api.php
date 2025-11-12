@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         // 🧍 Data Krama
         Route::get('/kramas', [DatakramaController::class, 'index']);   // daftar semua krama
         Route::get('/krama/{id}', [DatakramaController::class, 'show']); // detail krama
+        Route::get('/kramas/nik/{nik}', [DatakramaController::class, 'findByNik']);
 
         // 💰 Tagihan
         Route::get('/tagihan', [TagihanController::class, 'index']);     // daftar tagihan

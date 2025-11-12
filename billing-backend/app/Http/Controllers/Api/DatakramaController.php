@@ -8,21 +8,33 @@ use Illuminate\Http\Request;
 
 class DatakramaController extends Controller
 {
+    /** 🔹 Ambil semua data krama */
     public function index()
     {
-        // Mengambil semua data krama
         return response()->json(Datakrama::all());
     }
 
-    public function show($nik)
+    /** 🔹 Ambil data krama berdasarkan NIK (untuk React / form pencarian) */
+    public function findByNik($nik)
+{
+    try {
+        $krama = Datakrama::where('nik', $nik)->firstOrFail();
+        return response()->json($krama);
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        return response()->json(['message' => 'NIK tidak ditemukan.'], 404);
+    }
+}
+
+
+    /** 🔹 (Opsional) Ambil data krama berdasarkan ID */
+    public function show($id)
     {
-        // Mencari Datakrama berdasarkan NIK (menggunakan firstOrFail untuk 404 yang rapi)
-        try {
-            $krama = Datakrama::where('nik', $nik)->firstOrFail();
-            return response()->json($krama);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Respons JSON 404 jika NIK tidak ditemukan
-            return response()->json(['message' => 'NIK tidak ditemukan.'], 404);
+        $krama = Datakrama::find($id);
+
+        if (!$krama) {
+            return response()->json(['message' => 'Krama tidak ditemukan.'], 404);
         }
+
+        return response()->json($krama);
     }
 }
